@@ -1,0 +1,482 @@
+" Path to neovim python module
+let g:python3_host_prog = expand('~/.config/nvim/venv/bin/python')
+
+set tags=tags
+nmap <C-c> <Esc>
+
+" Python debugger
+autocmd FileType python nmap <buffer> <localleader>do oimport pdb; pdb.set_trace()<C-c>
+autocmd FileType python nmap <buffer> <localleader>dO Oimport pdb; pdb.set_trace()<C-c>
+
+"""""""" COLORS """"""""
+" Syntax highlight
+syntax on
+
+" So that colors do not mess with vim
+set background=dark
+
+" Set line numbers color to grey (default is yellow, like, please?)
+hi LineNr ctermfg=DarkGrey
+
+" Make nvim white status line not blinding
+hi StatusLine ctermbg=15 ctermfg=16
+
+hi TabLine ctermfg=15 ctermbg=Black
+hi TablineFill ctermfg=Black ctermbg=15
+hi TabLineSel ctermfg=Black ctermbg=15
+
+"""""""" GENERAL """"""""
+nmap <C-f> <Nop>
+nmap <Space> <Nop>
+let mapleader=" "
+let maplocalleader=","
+
+" Reload .vimrc with <space>+s
+map <silent> <leader>s :source ~/.vimrc<CR>
+
+"Add colored column at 90 to avoid going too far to the right
+"set colorcolumn=90
+"hi ColorColumn ctermbg=DarkGrey guibg=lightgrey
+" Terminal mode
+:tnoremap <Esc> <C-\><C-n>
+:tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+
+" Enable smart-case search
+set smartcase
+" Together with smartcase, ignore case when using lowercase
+set ignorecase
+" Searches for strings incrementally
+set incsearch
+
+" Highlight all matches
+set hlsearch
+" Press Esc to hide highlights
+nnoremap <silent> <Esc> :nohlsearch<bar>:echo<CR>
+" Show number of occurrances of searched pattern
+" Requires Vim 8.1.1270 and Neovim 0.4.0
+set shortmess-=S
+
+" Keep more info in memory to speed things up
+set hidden "this must go after nocompatible if using it
+set history=100
+
+" Reminder on how to Yank to system clipboard
+" <"*y>
+
+" Indent with logic (even though a 2 spaces width is set,
+" thanks to filetype it will use its own knowledge for
+" each file format, and use 2 when unknown)
+" use 'filetype indent on' if you have indent style files
+" use 'filetype plugin on' if you have plugins to indent
+" use 'filetype indent plugin on' for both
+filetype on
+" Auto-indent new lines
+set autoindent
+" When indenting with '>' use 2 spaces width
+set shiftwidth=2
+" Enable smart-tabs
+set smarttab
+" Number of spaces per Tab
+set tabstop=2
+" On pressing tab, insert 2 spaces (aka use spaces i.o. tabs)
+set expandtab
+" Friendly reminder you can use :%retab to convert all tabs
+" to white spaces if using expandtab, or just retab if not.
+
+" Remove whitespaces at the end of line on save
+" Note the final /e means not to display errors if occuring
+" autocmd BufWritePre * :%s/\s\+$//e
+" Remove whitespaces at the end of line
+nmap <Leader>dd :s/\s\+$//e<CR>
+nmap <Leader>dG :%s/\s\+$//e<CR>
+
+" Switch to most recent buffer
+nmap <leader><leader> :b#<CR>
+
+" Open file in new tab with Ctrl+o (final whitespace is on purpose)
+" nmap <C-o> :tabe
+" Move through tabs with <leader>t ot <leader>T
+"nmap <leader>t gt
+"nmap <leader>T gT
+
+" Keep position in window & buffer when switching among them
+" https://vim.fandom.com/wiki/Avoid_scrolling_when_switch_buffers
+"
+" Save current view settings on a per-window, per-buffer basis.
+function! AutoSaveWinView()
+  if !exists("w:SavedBufView")
+    let w:SavedBufView = {}
+  endif
+  let w:SavedBufView[bufnr("%")] = winsaveview()
+endfunction
+" Restore current view settings.
+function! AutoRestoreWinView()
+  let buf = bufnr("%")
+  if exists("w:SavedBufView") && has_key(w:SavedBufView, buf)
+    let v = winsaveview()
+    let atStartOfFile = v.lnum == 1 && v.col == 0
+    if atStartOfFile && !&diff
+      call winrestview(w:SavedBufView[buf])
+    endif
+    unlet w:SavedBufView[buf]
+  endif
+endfunction
+" When switching buffers, preserve window view.
+if v:version >= 700
+  autocmd BufLeave * call AutoSaveWinView()
+  autocmd BufEnter * call AutoRestoreWinView()
+endif
+
+" Break lines at word (requires Wrap lines(it's default))
+set linebreak
+" Wrap-broken line prefix
+" set showbreak=+++
+" Highlight matching brace
+set showmatch
+" Display relative line numbers
+set number relativenumber
+" Show row and column ruler information
+set ruler
+" Number of undo levels
+set undolevels=1000
+" Backspace behaviour
+set backspace=indent,eol,start
+" Indent depending on file
+filetype plugin indent on
+" Resize splits easily
+nnoremap <silent> <C-w>l :vertical resize +10<CR>
+nnoremap <silent> <C-w>h :vertical resize -10<CR>
+nnoremap <silent> <C-w>k :resize +10<CR>
+nnoremap <silent> <C-w>j :resize -10<CR>
+" Splits
+nnoremap <silent> <C-w>\| :vsplit<CR>
+nnoremap <silent> <C-w>- :split<CR>
+" Close split
+" nnoremap <silent> <Leader>q <C-w>q
+" Move through windows nicely
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+
+" Move thorugh buffers nicely
+nnoremap <silent> <tab> :bn<CR>
+nnoremap <silent> <S-tab> :bp<CR>
+nnoremap <silent> <C-q> :bp<cr>:bd #<cr>
+
+" Some basics:
+set nocompatible
+set encoding=utf-8
+" Always show sign column
+set signcolumn=yes
+
+" Splits open at the bottom and right
+set splitbelow splitright
+
+" LaTeX
+" Make lines wrap at 88 chars. Set to 0 to disable
+autocmd BufEnter *.tex set textwidth=88
+
+" Plugins
+" Specify a directory for plugins
+call plug#begin('~/.vim/plugged')
+
+" NERDTree
+Plug 'scrooloose/nerdtree'
+
+" Vim commentary
+Plug 'tpope/vim-commentary'
+
+" Vim-surround
+Plug 'tpope/vim-surround'
+
+" Vim-repeat
+Plug 'tpope/vim-repeat'
+
+" Vim-easyclip
+Plug 'svermeulen/vim-easyclip'
+
+" Vim-signature
+Plug 'kshenoy/vim-signature'
+
+" Tagbar
+Plug 'majutsushi/tagbar'
+
+" CtrlP (requires RipGrep)
+Plug 'ctrlpvim/ctrlp.vim'
+
+" Polyglot
+Plug 'sheerun/vim-polyglot'
+
+" Vim-fugitive
+Plug 'tpope/vim-fugitive'
+
+" Vim-gutentags and gutentags_plus
+" Plug 'ludovicchabant/vim-gutentags'
+
+" Ctrlsf
+Plug 'dyng/ctrlsf.vim'
+
+""" PYTHON
+" Indentpython
+Plug 'vim-scripts/indentpython.vim'
+" Vim-virtualenv
+Plug 'plytophogy/vim-virtualenv'
+" Indentline
+Plug 'Yggdroot/indentLine'
+
+""" CSS
+Plug 'ap/vim-css-color'
+
+""" HTML
+Plug 'mattn/emmet-vim'
+
+" Ale
+Plug 'w0rp/ale'
+
+" Vim-autoformat
+Plug 'Chiel92/vim-autoformat'
+
+" Autocomplete
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-jedi', {'for':'python'} " Python completion
+Plug 'ncm2/ncm2-cssomni', {'for':'css'} " CSS completion
+" If tern fails to work. Do: 'sudo npm install -g tern' and then go to
+" ~/.vim/plugged/ncm2-tern and do 'npm install'
+" Plug 'ncm2/ncm2-tern', { 'do': 'npm install && npm install -g tern', 'for':['javascript','javascript.jsx']} " JS completion
+Plug 'ncm2/ncm2-tern', {'do': 'npm install', 'for':['javascript','javascript.jsx']} " JS completion
+
+Plug 'fatih/vim-go'
+
+" Airline
+Plug 'vim-airline/vim-airline'
+
+" Airline themes
+Plug 'vim-airline/vim-airline-themes'
+
+" Tmuxline
+Plug 'edkolev/tmuxline.vim'
+
+""" Snippets
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'ncm2/ncm2-ultisnips'
+
+" Vim-Tmux-navigator
+Plug 'christoomey/vim-tmux-navigator'
+
+" Dracula
+Plug 'dracula/vim', { 'as': 'dracula' }
+
+" Initialize plugin system
+call plug#end()
+
+" enable ncm2 for all buffers
+autocmd BufEnter * call ncm2#enable_for_buffer()
+
+" Theme
+set background=dark
+syntax on
+let g:dracula_colorterm = 0
+color dracula
+
+" Tmuxline
+let g:airline#extensions#tmuxline#enabled = 0
+let g:tmuxline_powerline_separators = 0
+" let g:tmuxline_separators = {
+"     \ 'left' : '',
+"     \ 'left_alt': '>',
+"     \ 'right' : '',
+"     \ 'right_alt' : '<',
+"     \ 'space' : ' '}
+
+" IndentLine
+" let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+" Show hidden chars in Markdown and things when in the line
+" " Let indentLine use current conceal options
+" let g:indentLine_conceallevel  = &conceallevel
+autocmd FileType markdown let g:indentLine_concealcursor = &concealcursor
+autocmd FileType tex let g:indentLine_concealcursor = &concealcursor
+
+" NERDTree
+nnoremap <silent> <C-n> :NERDTreeToggle<CR>
+nmap <silent> <leader>n :NERDTreeFind<CR>
+let NERDTreeIgnore = ['\.pyc$', '^__pycache__$', '^\.?v?env$']
+let NERDTreeQuitOnOpen = 1
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+let NERDTreeAutoDeleteBuffer = 1 " Automatically delete the buffer of a deleted file in NERDTree
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+let NERDTreeShowHidden = 1
+
+" Airline
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#left_sep = "  "
+" let g:airline#extensions#tabline#left_alt_sep = "|"
+" let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline_left_sep  = ''
+let g:airline_right_sep = ''
+let g:airline#extensions#ale#enabled = 1
+let airline#extensions#ale#error_symbol = 'E:'
+let airline#extensions#ale#warning_symbol = 'W:'
+set noshowmode
+
+" Airline themes
+let g:airline_theme='dracula'
+
+" Specific config for airline in certain filetypes
+" Stop airline from checking for whitespaces so that
+" it doesn't output mixed-indent warnings in bib files (LaTeX)
+autocmd Filetype bib AirlineToggleWhitespace
+
+" Set mark keybind to gm instead of m, as m is for cutting with easyclip
+" nnoremap gm m
+let g:EasyClipUseCutDefaults = 0
+nmap <leader>m <Plug>MoveMotionPlug
+xmap <leader>m <Plug>MoveMotionXPlug
+nmap <leader>mm <Plug>MoveMotionLinePlug
+nmap <leader>M <Plug>MoveMotionEndOfLinePlug
+"" disable also Ctrl P from easyclip to let CtrlP use it
+let g:EasyClipUsePasteToggleDefaults = 0
+"" Format after pasting
+nmap <leader>cf <plug>EasyClipToggleFormattedPaste
+
+" Vim signature
+" If you want to change the color of the column: :highlight SignColumn ctermbg=green
+" To set it to transparent: highlight clear SignColumn
+highlight clear SignColumn
+
+" Tagbar
+nnoremap <silent> <Leader>t :TagbarToggle<CR>
+let g:tagbar_map_jump = 'o'
+let g:tagbar_map_togglefold = 'O'
+let g:tagbar_autofocus = 1
+let g:tagbar_compact = 1
+
+" CtrlP
+"" Use ripgrep
+if executable('rg')
+  let g:ctrlp_user_command = 'rg %s --files --hidden --color=never --glob ""'
+endif
+" Set root marker
+let g:ctrlp_root_markers = ['.ctrlp', '.git']
+"" ignore some files
+set wildignore+=*/.git/*,*/tmp/*,*.swp
+let g:ctrlp_custom_ignore = {
+      \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+      \ 'file': '\v\.(exe|so|dll)$',
+      \ 'link': 'some_bad_symbolic_links',
+      \ }
+"" CtrlP for buffers keybind
+nnoremap <Leader>b :CtrlPBuffer<CR>
+"" CtrlP from home
+nnoremap <Leader>p :CtrlP .<CR>
+
+" Ctags completion in insert mode
+inoremap <c-x><c-]> <c-]>
+" Gutentags and gutentags_plus
+" " enable gtags module
+" let g:gutentags_modules = ['ctags']
+" config project root markers.
+" let g:gutentags_project_root = ['.root', '.git']
+" generate datebases in my cache directory, prevent gtags files polluting my project
+" let g:gutentags_cache_dir = expand('~/.cache/tags')
+" change focus to quickfix window after search (optional).
+" let g:gutentags_plus_switch = 1
+" let g:gutentags_generate_on_missing = 1
+" let gutentags_generate_on_write = 1
+
+" Ctrlsf
+let g:ctrlsf_default_root = 'project'
+let g:ctrlsf_extra_root_markers = ['.root', '.git']
+let g:ctrlsf_search_mode = 'async'
+let g:ctrlsf_position = 'left'
+let g:ctrlsf_context = '-B 6 -A 4'
+nmap     <C-F>f <Plug>CtrlSFPrompt-G !(tags\|venv\|.venv\|env\|.env\|.git) 
+vmap     <C-F>v <Plug>CtrlSFVwordPath-G !(tags\|venv\|.venv\|env\|.env\|.git) 
+" vmap     <C-F>F <Plug>CtrlSFVwordExec
+nmap     <C-F>n <Plug>CtrlSFCwordPath-G !(tags\|venv\|.venv\|env\|.env\|.git) 
+nmap     <C-F>p <Plug>CtrlSFPwordPath-G !(tags\|venv\|.venv\|env\|.env\|.git) 
+nnoremap <C-F>o :CtrlSFOpen<CR>
+nnoremap <C-F>t :CtrlSFToggle<CR>
+inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
+" <Plug>CtrlSFPrompt
+" Input :CtrlSF in command line for you, just a handy shortcut.
+" <Plug>CtrlSFVwordPath
+" Input :CtrlSF foo in command line where foo is the current visual selected word, waiting for further input.
+" <Plug>CtrlSFVwordExec
+" Like <Plug>CtrlSFVwordPath, but execute it immediately.
+" <Plug>CtrlSFCwordPath
+" Input :CtrlSF foo in command line where foo is word under the cursor.
+" <Plug>CtrlSFCCwordPath
+" Like <Plug>CtrlSFCwordPath, but also add word boundary around searching word.
+" <Plug>CtrlSFPwordPath
+" Input :CtrlSF foo in command line where foo is the last search pattern of vim.
+let g:ctrlsf_auto_focus = {
+      \ "at": "start"
+      \ }
+
+" Ale
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+" For stylint, both stylint and stylint-config-recommended are needed
+" (sudo npm install -g stylelint stylelint-config-recommended)
+" ESLint and stylelint need config files in $HOME or project
+let g:ale_linters = {
+      \ 'python': ['flake8'],
+      \ 'javascript': ['eslint'],
+      \ 'json': ['eslint'],
+      \ 'html': ['stylelint'],
+      \ 'css': ['stylelint'],
+      \ 'bib': ['bibclean'],
+      \ }
+"" lint with F4
+noremap <silent> <F4> :ALELint<CR>
+
+" Autoformat
+noremap <silent> <F3> :Autoformat<CR>
+let g:formatters_python = ['black']
+let g:formatters_javascript = ['eslint']
+" These next 3 need js-beautify. 'sudo npm install -g js-beautify'
+let g:formatters_html = ['html-beautify']
+let g:formatters_css = ['css-beautify']
+let g:formatters_json = ['js-beautify']
+" Using the dots to concat strings. Vim replaces @% for the filename
+let g:formatdef_bibtex = '"bibclean ".@%'
+let g:formatters_bib = ['bibtex']
+" To debug: let g:autoformat_verbosemode=1
+let g:formatdef_terraform = '"terraform fmt -"'
+let g:formatters_terraform = ['terraform']
+
+" NCM2
+" Disable match x of y messages
+set shortmess+=c
+" enable ncm2 for all buffers
+autocmd BufEnter * call ncm2#enable_for_buffer()
+" IMPORTANT: :help Ncm2PopupOpen for more information
+set completeopt=noinsert,menuone,noselect
+" Use <TAB> to select the popup menu:
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" When the <Enter> key is pressed while the popup menu is visible, it only
+" hides the menu. Use this mapping to close the menu and also start a new
+" line.
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+
+" Fugitive Conflict Resolution
+nnoremap <silent> <leader>gd :Gvdiffsplit!<CR>
+nnoremap <silent> gdh :diffget //2<CR>
+nnoremap <silent> gdl :diffget //3<CR>
+
+" Emmet-vim
+let g:user_emmet_leader_key='<C-x>'
+
+" Ultisnips
+let g:UltiSnipsExpandTrigger="<C-l>"

@@ -1,0 +1,12 @@
+# Ctags
+tags
+.tags
+
+# Vim temporary files
+*~
+*.swp
+*.swo
+
+# Root files (I don't use them but meh)
+.root
+root
