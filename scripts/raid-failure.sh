@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# mdadm RAID health check
+# Script that I have set up to be called if MDADM detects an error in my RAID array
+# testable with $sudo mdadm --monitor --scan --test -1
 # Events are being passed to xmessage via $1 (events), $2 (mdadm device) and $3 component device if relevant
 
 # Needs MDADM_FAILURE_EMAIL_TO and MDADM_FAILURE_EMAIL_FROM in secrets.sh
