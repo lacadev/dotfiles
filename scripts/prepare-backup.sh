@@ -23,6 +23,8 @@ HOME_DIR="/home/${BACKUP_USER}"
 
 declare -a arr=(
         "$HOME_DIR/.ssh"
+        "$HOME_DIR/scripts/hosts.sh"
+        "$HOME_DIR/scripts/secrets.sh"
         "/etc/hosts"
         "/etc/nut"
         "/etc/ssh/ssh_config"
