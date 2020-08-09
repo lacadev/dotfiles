@@ -14,8 +14,9 @@ TARGET=$1
 
 SCRIPTS_DIR="$(realpath "$0" | xargs dirname)"
 source "${SCRIPTS_DIR}/hosts.sh"
+source "${SCRIPTS_DIR}/secrets.sh"
 
-mac=${hosts[${TARGET}]}
+mac=${macs[${TARGET}]}
 
 # Try 10 times just in case
 for i in {1..10}; do
