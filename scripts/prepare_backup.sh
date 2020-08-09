@@ -8,7 +8,6 @@ source "${SCRIPTS_DIR}/secrets.sh"
 HOME_DIR="/home/${BACKUP_USER}"
 
 declare -a arr=(
-        "$HOME_DIR/scripts"
         "$HOME_DIR/.ssh"
         "/etc/hosts"
         # "/etc/nut" # TODO: add in the future
