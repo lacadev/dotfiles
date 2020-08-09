@@ -1,6 +1,19 @@
 #!/bin/bash
 
+# This script will be called by backup.sh
+# The idea is that this will set up a temp directory
+# with all the files that need to be backed up copied
+# inside. After, backup.sh will backup those.
+
 # Needs BACKUP_USER to be specified in secrets.sh
+
+# Also needs to be executed with sudo, and if called
+# by the backup-host.sh script, you'll need to update
+# your sudoers files so that $ sudo prepare-backup.sh
+# doesn't ask for a password:
+# $ sudo visudo
+# And then add at the end:
+# <username> ALL = (root) NOPASSWD: /home/<username>/scripts/prepare-backup.sh
 
 SCRIPTS_DIR=$(realpath "$0" | xargs dirname)
 source "${SCRIPTS_DIR}/secrets.sh"
