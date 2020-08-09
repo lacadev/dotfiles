@@ -154,6 +154,12 @@ cd /tmp/bats-core || exit
 sudo ./install.sh /usr/bin
 
 
+#####################
+#  MY OWN SCRIPTS   #
+#####################
+ln -s $dotfiles/scripts ~/scripts
+
+
 # TODO: Make all sections functions instead, so that we could pass arguments
 # and just execute each function depending on the programs you want
 

@@ -1,0 +1,25 @@
+#! /bin/bash
+
+# This file should not be tracked by version control
+
+declare -A hosts
+# Just need to specify the hostname and its ip here
+hosts["name_host_1"]="10.0.0.2"
+hosts["name_host_2"]="10.0.0.54"
+hosts["name_host_3"]="10.0.1.109"
+
+
+# This will automatically create the reverse dictionary,
+# with ip as keys and hostname as value, for easy lookups by key
+declare -A ips
+for host in ${!hosts[@]}; do
+  ip=${hosts[${host}]}
+  ips[$ip]=$host
+done
+
+
+declare -A macs
+# Just need to specify the hostname and its mac here
+macs["name_host_1"]="12:34:ab:cd:56:ef"
+macs["name_host_1"]="98:76:ef:dc:54:ba"
+macs["name_host_1"]="00:11:aa:bb:99:ee"
