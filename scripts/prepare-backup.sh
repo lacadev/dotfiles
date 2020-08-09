@@ -20,10 +20,11 @@ source "${SCRIPTS_DIR}/secrets.sh"
 
 HOME_DIR="/home/${BACKUP_USER}"
 
+
 declare -a arr=(
         "$HOME_DIR/.ssh"
         "/etc/hosts"
-        # "/etc/nut" # TODO: add in the future
+        "/etc/nut"
         "/etc/ssh/ssh_config"
         "/etc/ssh/sshd_config"
         "/etc/sudoers"
@@ -37,9 +38,14 @@ TEMP_DIR="$(mktemp -d)"
 
 for i in "${arr[@]}"
 do
-  inner_dir=$(realpath "$i" | xargs dirname)
-  mkdir -p "${TEMP_DIR}${inner_dir}"
-  rsync -r -t "$i" "${TEMP_DIR}${inner_dir}"
+  # Check that file exists, be it a node, directory, etc.
+  # so that we can use the same list for all computers
+  # without rsync failing if a file doesn't exist
+  if [ -e "$i" ]; then
+    inner_dir=$(realpath "$i" | xargs dirname)
+    mkdir -p "${TEMP_DIR}${inner_dir}"
+    rsync -r -t -L "$i" "${TEMP_DIR}${inner_dir}"
+  fi
 done
 
 chown -R "$BACKUP_USER" "$TEMP_DIR"
