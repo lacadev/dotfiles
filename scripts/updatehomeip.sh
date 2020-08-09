@@ -6,6 +6,7 @@
 
 # Needs BW_SESSION in secrets.sh
 SCRIPTS_DIR=$(realpath $0 | xargs dirname)
+source "${SCRIPTS_DIR}/secrets.sh"
 
 BW_SESSION="${BW_SESSION}" /usr/local/bin/bw --quiet sync
 json_out=$(BW_SESSION="${BW_SESSION}" /usr/local/bin/bw get item "home-ip")
