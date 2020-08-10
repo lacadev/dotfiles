@@ -54,8 +54,11 @@ eval set -- "$PARAMS"
 
 HDD_DIR="/mnt/e"
 TARGET="$1"
-TARGET_ROOT="/mnt/${TARGET}"
 REPO="${HDD_DIR}/backups/${TARGET}"
+
+if [ "$NAS" = true ]; then
+  REPO="${REPO}-nas"
+fi
 
 # Clean up temp dir from sshfs mount
 cleanup () {
