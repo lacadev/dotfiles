@@ -26,12 +26,8 @@ while (( "$#" )); do
       shift
       ;;
     --nas)
-      if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
-        NAS_DIR=$2
-        shift 2
-      else
-        echo "Error: Argument for $1 is missing" >&2
-        exit 1
+      NAS=true
+      shift
       fi
       ;;
     -*|--*=) # unsupported flags
@@ -87,10 +83,10 @@ sudo chown "${USER}" "${HDD_DIR}"
 # Copy files to backup from target to local system
 TEMP_DIR="$(mktemp -d)"
 [ -d $TEMP_DIR ] || { >&2 echo "Failed to create temp dir $TEMP_DIR" ; exit 1; }
-if [ -z "$NAS_DIR" ]; then
-  REMOTE_DIR="$(ssh $TARGET 'sudo ~/scripts/prepare-backup.sh')"
-else
+if [ "$NAS" = true ]; then
   REMOTE_DIR="$(ssh $TARGET 'sudo ~/scripts/prepare-backup.sh --nas')"
+else
+  REMOTE_DIR="$(ssh $TARGET 'sudo ~/scripts/prepare-backup.sh')"
 fi
 sshfs -F "$HOME/.ssh/config" "$TARGET:$REMOTE_DIR" "$TEMP_DIR"
 [ -z $REMOTE_DIR ] && { >&2 echo "Failed to execute the prepare-backup.sh script on target $TARGET" ; exit 1; }
