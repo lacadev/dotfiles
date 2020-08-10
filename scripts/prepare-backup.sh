@@ -25,22 +25,33 @@ else
 fi
 
 
-TEMP_DIR="$(mktemp -d)"
-[ -d "$TEMP_DIR" ] || { >&2 echo "Could not create temp dir" ; exit 1; }
 
 if [ "$NAS" = true ]; then
+  TEMP_DIR=$(mktemp -d -p "$NAS_ROOT" "tmp.XXXXXXXXX")
+  [ -d "$TEMP_DIR" ] || { >&2 echo "Could not create temp dir" ; exit 1; }
   for i in "${BACKUP_NAS[@]}"
   do
     # Check that file exists, be it a node, directory, etc.
     # so that we can use the same list for all computers
     # without rsync failing if a file doesn't exist
     if [ -e "$i" ]; then
-      inner_dir=$(realpath "$i" | xargs dirname)
-      mkdir -p "${TEMP_DIR}${inner_dir}"
-      ln "$i" "${TEMP_DIR}${i}"
+      # Create directories of all the files inside
+      find "$i" -type d -print | \
+        sed 's/\(^.*$\)/"\1"/' | \
+        xargs realpath         | \
+        sed 's/\(^.*$\)/"\1"/' | \
+        xargs -I _ mkdir -p ${TEMP_DIR}_
+      # Create hard link for all files
+      find "$i" -type f -print | \
+        sed 's/\(^.*$\)/"\1"/' | \
+        xargs realpath         | \
+        sed 's/\(^.*$\)/"\1"/' | \
+        xargs -I _ ln _ ${TEMP_DIR}_
     fi
   done
 else
+  TEMP_DIR="$(mktemp -d)"
+  [ -d "$TEMP_DIR" ] || { >&2 echo "Could not create temp dir" ; exit 1; }
   # Copy files. We cannot just create hard links
   # because some files are owned by root
   for i in "${BACKUP_HOST[@]}"
@@ -55,7 +66,6 @@ else
     fi
   done
 fi
-
 
 chown -R "$BACKUP_USER" "$TEMP_DIR"
 

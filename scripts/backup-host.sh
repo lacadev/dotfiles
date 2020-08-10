@@ -28,7 +28,6 @@ while (( "$#" )); do
     --nas)
       NAS=true
       shift
-      fi
       ;;
     -*|--*=) # unsupported flags
       echo "Error: Unsupported flag $1" >&2
