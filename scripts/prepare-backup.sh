@@ -18,20 +18,44 @@
 SCRIPTS_DIR=$(realpath "$0" | xargs dirname)
 source "${SCRIPTS_DIR}/secrets.sh"
 
+if [ "$1" = "--nas" ]; then
+  NAS=true
+else
+  NAS=false
+fi
+
+
 TEMP_DIR="$(mktemp -d)"
 [ -d "$TEMP_DIR" ] || { >&2 echo "Could not create temp dir" ; exit 1; }
 
-for i in "${BACKUP_FILES[@]}"
-do
-  # Check that file exists, be it a node, directory, etc.
-  # so that we can use the same list for all computers
-  # without rsync failing if a file doesn't exist
-  if [ -e "$i" ]; then
-    inner_dir=$(realpath "$i" | xargs dirname)
-    mkdir -p "${TEMP_DIR}${inner_dir}"
-    rsync -r -t -L "$i" "${TEMP_DIR}${inner_dir}"
-  fi
-done
+if [ "$NAS" = true ]; then
+  for i in "${BACKUP_NAS[@]}"
+  do
+    # Check that file exists, be it a node, directory, etc.
+    # so that we can use the same list for all computers
+    # without rsync failing if a file doesn't exist
+    if [ -e "$i" ]; then
+      inner_dir=$(realpath "$i" | xargs dirname)
+      mkdir -p "${TEMP_DIR}${inner_dir}"
+      ln "$i" "${TEMP_DIR}${i}"
+    fi
+  done
+else
+  # Copy files. We cannot just create hard links
+  # because some files are owned by root
+  for i in "${BACKUP_HOST[@]}"
+  do
+    # Check that file exists, be it a node, directory, etc.
+    # so that we can use the same list for all computers
+    # without rsync failing if a file doesn't exist
+    if [ -e "$i" ]; then
+      inner_dir=$(realpath "$i" | xargs dirname)
+      mkdir -p "${TEMP_DIR}${inner_dir}"
+      rsync -r -t -L "$i" "${TEMP_DIR}${inner_dir}"
+    fi
+  done
+fi
+
 
 chown -R "$BACKUP_USER" "$TEMP_DIR"
 

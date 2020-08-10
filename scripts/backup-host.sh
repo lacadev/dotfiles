@@ -25,6 +25,15 @@ while (( "$#" )); do
       UMOUNT_AFTER_FINISH=true
       shift
       ;;
+    --nas)
+      if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+        NAS_DIR=$2
+        shift 2
+      else
+        echo "Error: Argument for $1 is missing" >&2
+        exit 1
+      fi
+      ;;
     -*|--*=) # unsupported flags
       echo "Error: Unsupported flag $1" >&2
       exit 1
@@ -78,9 +87,14 @@ sudo chown "${USER}" "${HDD_DIR}"
 # Copy files to backup from target to local system
 TEMP_DIR="$(mktemp -d)"
 [ -d $TEMP_DIR ] || { >&2 echo "Failed to create temp dir $TEMP_DIR" ; exit 1; }
-REMOTE_DIR="$(ssh $TARGET 'sudo ~/scripts/prepare-backup.sh')"
-[ -z $REMOTE_DIR ] && { >&2 echo "Failed to execute the prepare-backup.sh script on target $TARGET" ; exit 1; }
+if [ -z "$NAS_DIR" ]; then
+  REMOTE_DIR="$(ssh $TARGET 'sudo ~/scripts/prepare-backup.sh')"
+else
+  REMOTE_DIR="$(ssh $TARGET 'sudo ~/scripts/prepare-backup.sh --nas')"
+fi
 sshfs -F "$HOME/.ssh/config" "$TARGET:$REMOTE_DIR" "$TEMP_DIR"
+[ -z $REMOTE_DIR ] && { >&2 echo "Failed to execute the prepare-backup.sh script on target $TARGET" ; exit 1; }
+
 
 # If borg repo doesn't exist, create it
 [ -d ${REPO} ] || borg init --encryption none "${REPO}"
