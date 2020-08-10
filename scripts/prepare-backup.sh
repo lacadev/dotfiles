@@ -5,7 +5,7 @@
 # with all the files that need to be backed up copied
 # inside. After, backup.sh will backup those.
 
-# Needs BACKUP_USER to be specified in secrets.sh
+# Needs BACKUP_USER and BACKUP_FILES to be specified in secrets.sh
 
 # Also needs to be executed with sudo, and if called
 # by the backup-host.sh script, you'll need to update
@@ -18,27 +18,10 @@
 SCRIPTS_DIR=$(realpath "$0" | xargs dirname)
 source "${SCRIPTS_DIR}/secrets.sh"
 
-HOME_DIR="/home/${BACKUP_USER}"
-
-
-declare -a arr=(
-        "$HOME_DIR/.ssh"
-        "$HOME_DIR/scripts/hosts.sh"
-        "$HOME_DIR/scripts/secrets.sh"
-        "/etc/hosts"
-        "/etc/nut"
-        "/etc/ssh/ssh_config"
-        "/etc/ssh/sshd_config"
-        "/etc/sudoers"
-        "/etc/ufw/user.rules"
-        "/etc/ufw/user6.rules"
-        "/var/spool/cron/crontabs"
-)
-
 TEMP_DIR="$(mktemp -d)"
 [ -d "$TEMP_DIR" ] || { >&2 echo "Could not create temp dir" ; exit 1; }
 
-for i in "${arr[@]}"
+for i in "${BACKUP_FILES[@]}"
 do
   # Check that file exists, be it a node, directory, etc.
   # so that we can use the same list for all computers
