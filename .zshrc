@@ -52,9 +52,8 @@ alias gpuTemp="watch --color -t -n 2 ~/.scripts/gputemp.sh"
 alias listLogins="watch --color -t -n 2 ~/.scripts/listLogins.sh"
 alias vim='nvim'
 alias genPythonTags='ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags $(python -c "import os, sys; print(\" \".join(\"{}\".format(d) for d in sys.path if os.path.isdir(d)))") .'
-alias dockerRemoveUntaggedImages='sudo docker rmi $(sudo docker images | grep "^<none>" | awk "{print $3}")'
-alias dockerRemoveStoppedContainers='sudo docker rm $(sudo docker ps -a -q)'
 alias jupyterVenv='pip3 install ipykernel; python -m ipykernel install --name=venv'
+alias tmuxbell="echo -e '\a'"
 
 ctags=/usr/local/bin/ctags
 
