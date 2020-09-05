@@ -25,7 +25,8 @@ sudo apt install software-properties-common -y
 sudo apt update
 sudo apt install git curl tldr -y
 install_if_min_release "ripgrep" "18.10"
-ln -s $dotfiles/.gitconfig ~/.gitconfig
+# Copy .gitconfig instead of symlink because user depends on computer
+cp $dotfiles/.gitconfig ~/.gitconfig
 ln -s $dotfiles/.gitignore_global ~/.gitignore_global
 
 
