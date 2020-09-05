@@ -1,6 +1,6 @@
 [user]
-	email = 36073068+lacadev@users.noreply.github.com
-	name = lacadev
+	; email = 36073068+lacadev@users.noreply.github.com
+	; name = lacadev
 [core]
 	excludesfile = ~/.gitignore_global
 [alias]
