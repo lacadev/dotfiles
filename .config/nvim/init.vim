@@ -56,12 +56,20 @@ nnoremap <silent> <Esc> :nohlsearch<bar>:echo<CR>
 " Requires Vim 8.1.1270 and Neovim 0.4.0
 set shortmess-=S
 
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
 " Keep more info in memory to speed things up
 set hidden "this must go after nocompatible if using it
 set history=100
 
-" Reminder on how to Yank to system clipboard
-" <"*y>
+" Some servers have issues with backup files
+set nobackup
+set nowritebackup
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
 
 " Indent with logic (even though a 2 spaces width is set,
 " thanks to filetype it will use its own knowledge for
@@ -91,7 +99,7 @@ nmap <Leader>dd :s/\s\+$//e<CR>
 nmap <Leader>dG :%s/\s\+$//e<CR>
 
 " Switch to most recent buffer
-nmap <leader><leader> :b#<CR>
+nmap <silent> <leader><leader> :b#<CR>
 
 " Open file in new tab with Ctrl+o (final whitespace is on purpose)
 " nmap <C-o> :tabe
@@ -167,8 +175,14 @@ nnoremap <silent> <C-q> :bp<cr>:bd #<cr>
 " Some basics:
 set nocompatible
 set encoding=utf-8
-" Always show sign column
-set signcolumn=yes
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
 
 " Splits open at the bottom and right
 set splitbelow splitright
@@ -194,61 +208,74 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 
 " Vim-easyclip
+" Differentiate between deleting and cutting text
 Plug 'svermeulen/vim-easyclip'
 
 " Vim-signature
+" Marks
 Plug 'kshenoy/vim-signature'
 
 " Tagbar
-Plug 'majutsushi/tagbar'
+" Plug 'majutsushi/tagbar'
 
 " CtrlP (requires RipGrep)
+" Fuzzy file finding
 Plug 'ctrlpvim/ctrlp.vim'
 
 " Polyglot
 Plug 'sheerun/vim-polyglot'
 
 " Vim-fugitive
-Plug 'tpope/vim-fugitive'
+" Plug 'tpope/vim-fugitive'
 
 " Vim-gutentags and gutentags_plus
 " Plug 'ludovicchabant/vim-gutentags'
 
 " Ctrlsf
-Plug 'dyng/ctrlsf.vim'
+" Find references of a word in the code.
+" coc.nvim covers this already
+" Plug 'dyng/ctrlsf.vim'
 
 """ PYTHON
 " Indentpython
-Plug 'vim-scripts/indentpython.vim'
+" Plug 'vim-scripts/indentpython.vim'
 " Vim-virtualenv
-Plug 'plytophogy/vim-virtualenv'
+" Plug 'plytophogy/vim-virtualenv'
+
 " Indentline
+" Show thin vertical lines when there's indentation
 Plug 'Yggdroot/indentLine'
 
 """ CSS
+" Show colors
 Plug 'ap/vim-css-color'
 
 """ HTML
+" Ease HTML tag writing
 Plug 'mattn/emmet-vim'
 
 " Ale
+" Linting
 Plug 'w0rp/ale'
 
 " Vim-autoformat
 Plug 'Chiel92/vim-autoformat'
 
-" Autocomplete
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
+" Coc.nvim
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-jedi', {'for':'python'} " Python completion
-Plug 'ncm2/ncm2-cssomni', {'for':'css'} " CSS completion
-" If tern fails to work. Do: 'sudo npm install -g tern' and then go to
-" ~/.vim/plugged/ncm2-tern and do 'npm install'
-" Plug 'ncm2/ncm2-tern', { 'do': 'npm install && npm install -g tern', 'for':['javascript','javascript.jsx']} " JS completion
-Plug 'ncm2/ncm2-tern', {'do': 'npm install', 'for':['javascript','javascript.jsx']} " JS completion
+" Autocomplete
+" Plug 'ncm2/ncm2'
+" Plug 'roxma/nvim-yarp'
+
+" Plug 'ncm2/ncm2-bufword'
+" Plug 'ncm2/ncm2-path'
+" Plug 'ncm2/ncm2-jedi', {'for':'python'} " Python completion
+" Plug 'ncm2/ncm2-cssomni', {'for':'css'} " CSS completion
+" " If tern fails to work. Do: 'sudo npm install -g tern' and then go to
+" " ~/.vim/plugged/ncm2-tern and do 'npm install'
+" " Plug 'ncm2/ncm2-tern', { 'do': 'npm install && npm install -g tern', 'for':['javascript','javascript.jsx']}
+" Plug 'ncm2/ncm2-tern', {'do': 'npm install', 'for':['javascript','javascript.jsx']} " JS completion
 
 Plug 'fatih/vim-go'
 
@@ -262,9 +289,9 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'edkolev/tmuxline.vim'
 
 """ Snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'ncm2/ncm2-ultisnips'
+" Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
+" Plug 'ncm2/ncm2-ultisnips'
 
 " Vim-Tmux-navigator
 Plug 'christoomey/vim-tmux-navigator'
@@ -276,7 +303,7 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 call plug#end()
 
 " enable ncm2 for all buffers
-autocmd BufEnter * call ncm2#enable_for_buffer()
+" autocmd BufEnter * call ncm2#enable_for_buffer()
 
 " Theme
 set background=dark
@@ -457,18 +484,18 @@ let g:formatters_terraform = ['terraform']
 
 " NCM2
 " Disable match x of y messages
-set shortmess+=c
-" enable ncm2 for all buffers
-autocmd BufEnter * call ncm2#enable_for_buffer()
-" IMPORTANT: :help Ncm2PopupOpen for more information
-set completeopt=noinsert,menuone,noselect
-" Use <TAB> to select the popup menu:
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" When the <Enter> key is pressed while the popup menu is visible, it only
-" hides the menu. Use this mapping to close the menu and also start a new
-" line.
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+" set shortmess+=c
+" " enable ncm2 for all buffers
+" autocmd BufEnter * call ncm2#enable_for_buffer()
+" " IMPORTANT: :help Ncm2PopupOpen for more information
+" set completeopt=noinsert,menuone,noselect
+" " Use <TAB> to select the popup menu:
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" " When the <Enter> key is pressed while the popup menu is visible, it only
+" " hides the menu. Use this mapping to close the menu and also start a new
+" " line.
+" inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
 
 " Fugitive Conflict Resolution
 nnoremap <silent> <leader>gd :Gvdiffsplit!<CR>
@@ -480,3 +507,124 @@ let g:user_emmet_leader_key='<C-x>'
 
 " Ultisnips
 let g:UltiSnipsExpandTrigger="<C-l>"
+
+" JSONC syntax highlighting for comments
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+" coc.nvim config
+" ------------------------------------------------------
+ " Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion. (Mac OS maps this to changing keyboard
+" layout)
+" if has('nvim')
+"   inoremap <silent><expr> <c-space> coc#refresh()
+" else
+"   inoremap <silent><expr> <c-@> coc#refresh()
+" endif
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold (the time it takes to trigger is
+" set by 'set updatetime='
+" autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Remap for format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType scala setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Remap for do codeAction of current line
+xmap <leader>a  <Plug>(coc-codeaction-line)
+nmap <leader>a  <Plug>(coc-codeaction-line)
+
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Trigger for code actions
+" Make sure `"codeLens.enable": true` is set in your coc config
+nnoremap <leader>cl :<C-u>call CocActionAsync('codeLensAction')<CR>
+
+" See https://github.com/neoclide/coc.nvim/wiki/F.A.Q#how-to-change-highlight-of-diagnostic-signs
+highlight link CocWarningSign DraculaOrange
+
+" Mappings for CoCList
+" Show all diagnostics.
+nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+" Help Vim recognize *.sbt and *.sc as Scala files
+au BufRead,BufNewFile *.sbt,*.sc set filetype=scala

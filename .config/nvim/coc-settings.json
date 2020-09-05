@@ -1,1 +1,6 @@
-{}
+{
+  "codeLens.enable": true,
+  // "suggest.labelMaxLength": 20,
+  "suggest.floatEnable": false
+  //"suggest.enablePreview": false
+}
