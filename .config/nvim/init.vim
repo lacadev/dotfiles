@@ -506,7 +506,7 @@ nnoremap <silent> gdl :diffget //3<CR>
 let g:user_emmet_leader_key='<C-x>'
 
 " Ultisnips
-let g:UltiSnipsExpandTrigger="<C-l>"
+" let g:UltiSnipsExpandTrigger="<C-l>"
 
 " JSONC syntax highlighting for comments
 autocmd FileType json syntax match Comment +\/\/.\+$+
@@ -538,10 +538,12 @@ endfunction
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
 " <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+" coc#on_enter() notifies coc.nvim that <enter> has been pressed. Useful
+" for multiline string autoformatting and others.
 if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 else
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 endif
 
 " Use `[g` and `]g` to navigate diagnostics
