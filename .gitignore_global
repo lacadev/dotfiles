@@ -2,11 +2,16 @@
 tags
 .tags
 
+# Root files (I don't use them but meh)
+.root
+root
+
 # Vim temporary files
 *~
 *.swp
 *.swo
 
-# Root files (I don't use them but meh)
-.root
-root
+# Scala coc.nvim metals files
+.bloop/
+.metals/
+project/
