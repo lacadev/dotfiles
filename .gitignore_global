@@ -11,6 +11,9 @@ root
 *.swp
 *.swo
 
+# coc.nvim project folders
+.vim/
+
 # Scala coc.nvim metals files
 .bloop/
 .metals/
