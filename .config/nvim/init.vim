@@ -15,16 +15,6 @@ syntax on
 " So that colors do not mess with vim
 set background=dark
 
-" Set line numbers color to grey (default is yellow, like, please?)
-hi LineNr ctermfg=DarkGrey
-
-" Make nvim white status line not blinding
-hi StatusLine ctermbg=15 ctermfg=16
-
-hi TabLine ctermfg=15 ctermbg=Black
-hi TablineFill ctermfg=Black ctermbg=15
-hi TabLineSel ctermfg=Black ctermbg=15
-
 """""""" GENERAL """"""""
 nmap <C-f> <Nop>
 nmap <Space> <Nop>
@@ -233,8 +223,7 @@ Plug 'sheerun/vim-polyglot'
 
 " Ctrlsf
 " Find references of a word in the code.
-" coc.nvim covers this already
-" Plug 'dyng/ctrlsf.vim'
+Plug 'dyng/ctrlsf.vim'
 
 """ PYTHON
 " Indentpython
@@ -263,6 +252,9 @@ Plug 'Chiel92/vim-autoformat'
 
 " Coc.nvim
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Debugger
+Plug 'puremourning/vimspector'
 
 " Autocomplete
 " Plug 'ncm2/ncm2'
@@ -418,34 +410,31 @@ inoremap <c-x><c-]> <c-]>
 " let gutentags_generate_on_write = 1
 
 " Ctrlsf
-let g:ctrlsf_default_root = 'project'
-let g:ctrlsf_extra_root_markers = ['.root', '.git']
-let g:ctrlsf_search_mode = 'async'
-let g:ctrlsf_position = 'left'
-let g:ctrlsf_context = '-B 6 -A 4'
-nmap     <C-F>f <Plug>CtrlSFPrompt-G !(tags\|venv\|.venv\|env\|.env\|.git) 
-vmap     <C-F>v <Plug>CtrlSFVwordPath-G !(tags\|venv\|.venv\|env\|.env\|.git) 
-" vmap     <C-F>F <Plug>CtrlSFVwordExec
-nmap     <C-F>n <Plug>CtrlSFCwordPath-G !(tags\|venv\|.venv\|env\|.env\|.git) 
-nmap     <C-F>p <Plug>CtrlSFPwordPath-G !(tags\|venv\|.venv\|env\|.env\|.git) 
+nmap     <C-F>f <Plug>CtrlSFPrompt
+vmap     <C-F>f <Plug>CtrlSFVwordPath
+vmap     <C-F>F <Plug>CtrlSFVwordExec
+nmap     <C-F>n <Plug>CtrlSFCwordPath
+nmap     <C-F>p <Plug>CtrlSFPwordPath
 nnoremap <C-F>o :CtrlSFOpen<CR>
 nnoremap <C-F>t :CtrlSFToggle<CR>
 inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
-" <Plug>CtrlSFPrompt
-" Input :CtrlSF in command line for you, just a handy shortcut.
-" <Plug>CtrlSFVwordPath
-" Input :CtrlSF foo in command line where foo is the current visual selected word, waiting for further input.
-" <Plug>CtrlSFVwordExec
-" Like <Plug>CtrlSFVwordPath, but execute it immediately.
-" <Plug>CtrlSFCwordPath
-" Input :CtrlSF foo in command line where foo is word under the cursor.
-" <Plug>CtrlSFCCwordPath
-" Like <Plug>CtrlSFCwordPath, but also add word boundary around searching word.
-" <Plug>CtrlSFPwordPath
-" Input :CtrlSF foo in command line where foo is the last search pattern of vim.
+let g:ctrlsf_default_root = 'project'
+let g:ctrlsf_search_mode = 'async'
+let g:ctrlsf_position = 'left'
+let g:ctrlsf_context = '-B 6 -A 4'
+let g:ctrlsf_auto_close = {
+    \ "normal" : 0,
+    \ "compact": 0
+    \}
+let g:ctrlsf_auto_preview = 0
 let g:ctrlsf_auto_focus = {
       \ "at": "start"
       \ }
+let g:ctrlsf_mapping = {
+    \ "next": { "key": "<C-j>", "suffix": "zz" },
+    \ "prev": { "key": "<C-k>", "suffix": "zz" },
+    \ "pquit": ["q", "<Esc>"],
+    \ }
 
 " Ale
 let g:ale_lint_on_enter = 0
@@ -630,3 +619,6 @@ highlight link CocWarningSign DraculaOrange
 
 " Help Vim recognize *.sbt and *.sc as Scala files
 au BufRead,BufNewFile *.sbt,*.sc set filetype=scala
+
+" Vimspector
+let g:vimspector_enable_mappings = 'HUMAN'
