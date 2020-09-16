@@ -30,9 +30,11 @@ else
 fi
 
 # Load pyenv config if installed
-[ -x "$(command -v pyenv)" ] && source $HOME/.config/zsh/pyenv.sh
+if [ -x "$(command -v pyenv)" ]; then 
+  source $HOME/.config/zsh/pyenv.sh
+fi
 # Load jenv config if installed
-[ -x "$(command -v jenv)" ] && source $HOME/.config/zsh/jenv.sh
+source $HOME/.config/zsh/jenv.sh
 
 # iTerm2 zsh integration
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

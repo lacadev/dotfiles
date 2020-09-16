@@ -216,7 +216,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'sheerun/vim-polyglot'
 
 " Vim-fugitive
-" Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 
 " Vim-gutentags and gutentags_plus
 " Plug 'ludovicchabant/vim-gutentags'
