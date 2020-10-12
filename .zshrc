@@ -43,11 +43,10 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # for more info on terminal tab names
 DISABLE_AUTO_TITLE="true"
 
+# Go development
+export PATH="$HOME/go/bin:$PATH"
+
 # ALIASES
 alias wisdom="fortune | cowsay | lolcat"
-alias gpuTemp="watch --color -t -n 2 ~/.scripts/gputemp.sh"
-alias listLogins="watch --color -t -n 2 ~/.scripts/listLogins.sh"
 alias vim='nvim'
-alias genPythonTags='ctags -R --fields=+l --languages=python --python-kinds=-iv -f ./tags $(python -c "import os, sys; print(\" \".join(\"{}\".format(d) for d in sys.path if os.path.isdir(d)))") .'
-alias jupyterVenv='pip3 install ipykernel; python -m ipykernel install --name=venv'
 alias tmuxbell="echo -e '\a'"
