@@ -205,9 +205,6 @@ Plug 'svermeulen/vim-easyclip'
 " Marks
 Plug 'kshenoy/vim-signature'
 
-" Tagbar
-" Plug 'majutsushi/tagbar'
-
 " CtrlP (requires RipGrep)
 " Fuzzy file finding
 Plug 'ctrlpvim/ctrlp.vim'
@@ -224,12 +221,6 @@ Plug 'tpope/vim-fugitive'
 " Ctrlsf
 " Find references of a word in the code.
 Plug 'dyng/ctrlsf.vim'
-
-""" PYTHON
-" Indentpython
-" Plug 'vim-scripts/indentpython.vim'
-" Vim-virtualenv
-" Plug 'plytophogy/vim-virtualenv'
 
 " Indentline
 " Show thin vertical lines when there's indentation
@@ -256,21 +247,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Debugger
 Plug 'puremourning/vimspector'
 
-" Autocomplete
-" Plug 'ncm2/ncm2'
-" Plug 'roxma/nvim-yarp'
-
-" Plug 'ncm2/ncm2-bufword'
-" Plug 'ncm2/ncm2-path'
-" Plug 'ncm2/ncm2-jedi', {'for':'python'} " Python completion
-" Plug 'ncm2/ncm2-cssomni', {'for':'css'} " CSS completion
-" " If tern fails to work. Do: 'sudo npm install -g tern' and then go to
-" " ~/.vim/plugged/ncm2-tern and do 'npm install'
-" " Plug 'ncm2/ncm2-tern', { 'do': 'npm install && npm install -g tern', 'for':['javascript','javascript.jsx']}
-" Plug 'ncm2/ncm2-tern', {'do': 'npm install', 'for':['javascript','javascript.jsx']} " JS completion
-
-Plug 'fatih/vim-go'
-
 " Airline
 Plug 'vim-airline/vim-airline'
 
@@ -279,11 +255,6 @@ Plug 'vim-airline/vim-airline-themes'
 
 " Tmuxline
 Plug 'edkolev/tmuxline.vim'
-
-""" Snippets
-" Plug 'SirVer/ultisnips'
-" Plug 'honza/vim-snippets'
-" Plug 'ncm2/ncm2-ultisnips'
 
 " Vim-Tmux-navigator
 Plug 'christoomey/vim-tmux-navigator'
@@ -294,9 +265,6 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 " Initialize plugin system
 call plug#end()
 
-" enable ncm2 for all buffers
-" autocmd BufEnter * call ncm2#enable_for_buffer()
-
 " Theme
 set background=dark
 syntax on
@@ -306,12 +274,6 @@ color dracula
 " Tmuxline
 let g:airline#extensions#tmuxline#enabled = 0
 let g:tmuxline_powerline_separators = 0
-" let g:tmuxline_separators = {
-"     \ 'left' : '',
-"     \ 'left_alt': '>',
-"     \ 'right' : '',
-"     \ 'right_alt' : '<',
-"     \ 'space' : ' '}
 
 " IndentLine
 " let g:indentLine_char_list = ['|', '¦', '┆', '┊']
@@ -333,10 +295,6 @@ let NERDTreeDirArrows = 1
 let NERDTreeShowHidden = 1
 
 " Airline
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#left_sep = "  "
-" let g:airline#extensions#tabline#left_alt_sep = "|"
-" let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline_left_sep  = ''
 let g:airline_right_sep = ''
 let g:airline#extensions#ale#enabled = 1
@@ -394,20 +352,6 @@ let g:ctrlp_custom_ignore = {
 nnoremap <Leader>b :CtrlPBuffer<CR>
 "" CtrlP from home
 nnoremap <Leader>p :CtrlP .<CR>
-
-" Ctags completion in insert mode
-inoremap <c-x><c-]> <c-]>
-" Gutentags and gutentags_plus
-" " enable gtags module
-" let g:gutentags_modules = ['ctags']
-" config project root markers.
-" let g:gutentags_project_root = ['.root', '.git']
-" generate datebases in my cache directory, prevent gtags files polluting my project
-" let g:gutentags_cache_dir = expand('~/.cache/tags')
-" change focus to quickfix window after search (optional).
-" let g:gutentags_plus_switch = 1
-" let g:gutentags_generate_on_missing = 1
-" let gutentags_generate_on_write = 1
 
 " Ctrlsf
 nmap     <C-F>f <Plug>CtrlSFPrompt
@@ -471,21 +415,6 @@ let g:formatters_bib = ['bibtex']
 let g:formatdef_terraform = '"terraform fmt -"'
 let g:formatters_terraform = ['terraform']
 
-" NCM2
-" Disable match x of y messages
-" set shortmess+=c
-" " enable ncm2 for all buffers
-" autocmd BufEnter * call ncm2#enable_for_buffer()
-" " IMPORTANT: :help Ncm2PopupOpen for more information
-" set completeopt=noinsert,menuone,noselect
-" " Use <TAB> to select the popup menu:
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" " When the <Enter> key is pressed while the popup menu is visible, it only
-" " hides the menu. Use this mapping to close the menu and also start a new
-" " line.
-" inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-
 " Fugitive Conflict Resolution
 nnoremap <silent> <leader>gd :Gvdiffsplit!<CR>
 nnoremap <silent> gdh :diffget //2<CR>
@@ -493,9 +422,6 @@ nnoremap <silent> gdl :diffget //3<CR>
 
 " Emmet-vim
 let g:user_emmet_leader_key='<C-x>'
-
-" Ultisnips
-" let g:UltiSnipsExpandTrigger="<C-l>"
 
 " JSONC syntax highlighting for comments
 autocmd FileType json syntax match Comment +\/\/.\+$+
