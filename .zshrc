@@ -29,12 +29,10 @@ else
    export EDITOR='nvim'
 fi
 
-# Load pyenv config if installed
-if [ -x "$(command -v pyenv)" ]; then 
-  source $HOME/.config/zsh/pyenv.sh
-fi
-# Load jenv config if installed
-source $HOME/.config/zsh/jenv.sh
+# Point to pyenv local repo and add binary to path
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+
 
 # iTerm2 zsh integration
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
