@@ -43,10 +43,13 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # for more info on terminal tab names
 DISABLE_AUTO_TITLE="true"
 
-# Go development
+# Go executables
 export PATH="$HOME/go/bin:$PATH"
 
 # ALIASES
 alias wisdom="fortune | cowsay | lolcat"
 alias vim='nvim'
 alias tmuxbell="echo -e '\a'"
+
+# Tmux will use this to determine which shell to use
+export SHELL="$(which zsh)"
