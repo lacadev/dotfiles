@@ -31,3 +31,6 @@ RUN useradd -m $user && \
 RUN sed -i "s/required/sufficient/" /etc/pam.d/chsh
 
 USER $user
+
+COPY entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

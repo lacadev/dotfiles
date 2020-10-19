@@ -1,0 +1,7 @@
+name: 'test-dotfiles'
+description: 'Test dotfiles using bats'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - "/github/workspace/test.bats"

@@ -27,7 +27,8 @@ function setup_file() {
   [ -L $HOME/.zshrc ] && [ -e $HOME/.zshrc ]
   [ -L $HOME/.zprofile ] && [ -e $HOME/.zprofile ]
   # Check that ZSH is the default shell
-  [ "$SHELL" == "$(which zsh)" ]
+  current_shell=$(getent passwd $(whoami) | cut -d ":" -f 7)
+  [ "$current_shell" == "$(which zsh)" ]
   # Check that oh-my-zsh is installed
   [ "$(ls $HOME/.oh-my-zsh)" ]
   # Check that oh-my-zsh plugins are installed
@@ -56,7 +57,6 @@ function setup_file() {
 
 @test "tmux is installed correctly" {
  # Check tmux is installed
- tmux -V > /dev/null
  # Check that a symlink to the config has been created
  [ -L $HOME/.tmux.conf ] && [ -e $HOME/.tmux.conf ]
  # Check that plugins are installed correctly, apart from tpm

@@ -1,0 +1,13 @@
+name: test
+on:
+  push:
+    branches:
+    - master
+jobs:
+  test-dotfiles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests in docker
+        uses: ./

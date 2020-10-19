@@ -11,13 +11,13 @@ help:
 IMAGE=dotfiles
 
 test-build: ## Build the container image to test
-	@docker build -t "$(IMAGE)" .
+	docker build -t "$(IMAGE)" .
 
 test-build-nc: ## Build the container image to test without caching layers
-	@docker build --no-cache -t "$(IMAGE)" .
+	docker build --no-cache -t "$(IMAGE)" .
 
 test: ## Run tests on container
-	@docker run -it --rm --name="$(IMAGE)" -v "$(shell pwd):/tmp/dotfiles" "$(IMAGE)-test" bats /tmp/dotfiles/test.bats
+	docker run -it --rm --name="$(IMAGE)-test" -v "$(shell pwd):/tmp/dotfiles" "$(IMAGE)" /tmp/dotfiles/test.bats
 
 exec: ## Install dotfiles and enter the container
-	@docker run -it --rm --name="$(IMAGE)" -v "$(shell pwd):/tmp/dotfiles" "$(IMAGE)" bash
+	@docker run -it --rm --name="$(IMAGE)" -v "$(shell pwd):/tmp/dotfiles" --entrypoint "/bin/sh" "$(IMAGE)"

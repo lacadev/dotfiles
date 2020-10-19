@@ -45,7 +45,7 @@ function install_zsh() {
   # Install OhMyZsh
   info "Installing OhMyZsh..."
   # TODO: Install in a less dirty way than piping to shell
-  sudo apt install curl -y
+  sudo apt install curl git -y
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
   info "Installing OhMyZsh plugins..."
   # Install zsh-syntax-highlighting plugin using OhMyZsh as the plugin manager
@@ -106,6 +106,7 @@ function install_tmux() {
 
 function install_pyenv() {
   info "Installing pyenv..."
+  sudo apt install git -y
   git clone https://github.com/pyenv/pyenv.git ~/.pyenv
   # Dependencies needed to build python versions
   sudo apt install --no-install-recommends -y \

@@ -1,4 +1,7 @@
 # dotfiles
+
+![CI](https://github.com/lacadev/dotfiles/workflows/test/badge.svg?branch=master)
+
 Just to be clear, these assume you are using *Ubuntu*. Go ahead, judge me. I too used to be an Arch user.
 
 ## Installation
