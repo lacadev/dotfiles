@@ -19,7 +19,6 @@ function install_if_min_release() {
 function install_common() {
   sudo apt install software-properties-common -y
   sudo apt update
-  sudo apt install curl -y
 }
 
 function install_dev_utils() {
@@ -45,6 +44,8 @@ function install_zsh() {
   chsh -s $(which zsh)
   # Install OhMyZsh
   info "Installing OhMyZsh..."
+  # TODO: Install in a less dirty way than piping to shell
+  sudo apt install curl -y
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
   info "Installing OhMyZsh plugins..."
   # Install zsh-syntax-highlighting plugin using OhMyZsh as the plugin manager
@@ -67,6 +68,7 @@ function install_neovim() {
   ln -s -f $DOTFILES/.config/nvim/init.vim ~/.config/nvim/init.vim
   ln -s -f $DOTFILES/.config/nvim/init.vim ~/.vimrc
   # Install Vim-Plug
+  sudo apt install curl -y
   curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   # Set up pynvim, needed for python plugins (https://github.com/neovim/pynvim)
   sudo apt install gcc libpq-dev -y
@@ -89,6 +91,7 @@ function install_tmux() {
   sudo apt install tmux -y
   # Copy .tmux.conf from dotfiles
   ln -s -f $DOTFILES/.tmux.conf ~/.tmux.conf
+  tmux new-session -d -s "temp-session" "echo hello"
   # Save neovim theme using tmuxline plugin to have tmux match it
   if type nvim > /dev/null; then
     info "Installing tmux theme to match nvim's..."
@@ -136,7 +139,7 @@ function install_latex() {
   # Untested because I hope I never have to use this again
   info "Installing latex..."
   apt install texlive-full latexmk bibclean -y
-  ln -s $DOTFILES/.latexmkrc ~/.latexmkrc
+  ln -s -f $DOTFILES/.latexmkrc ~/.latexmkrc
 }
 
 function install_nodejs() {
