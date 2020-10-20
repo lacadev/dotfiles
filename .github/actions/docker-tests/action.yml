@@ -1,0 +1,11 @@
+name: 'docker-tests'
+description: 'Test dotfiles using bats in a docker container'
+inputs:
+  tests-path:
+    description: 'Path to tests directory relative to the root of the repo'
+    required: true
+runs:
+  using: 'docker'
+  image: '../../../test/Dockerfile'
+  args:
+    - "/github/workspace/${{ inputs.tests-path }}"

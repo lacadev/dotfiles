@@ -15,12 +15,13 @@ RUN apt-get install git -y \
       && git clone https://github.com/bats-core/bats-core.git \
       && cd bats-core \
       && ./install.sh /usr/local \
+      && cd .. \
+      && rm -rf bats-core \
       && apt-get remove git -y
 
 RUN apt-get -y install sudo
 
 ARG user=docker
-
 # Create user and make sudo not ask for password
 RUN useradd -m $user && \
       echo "docker:docker" | chpasswd && \
@@ -29,8 +30,7 @@ RUN useradd -m $user && \
 
 # Make chsh not ask for password
 RUN sed -i "s/required/sufficient/" /etc/pam.d/chsh
-
 USER $user
 
-COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+COPY entrypoint.sh /entrypoint.sh

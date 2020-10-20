@@ -1,8 +1,14 @@
+function log() {
+  echo "# $1 " >&3
+}
+
 function setup_file() {
-  $BATS_TEST_DIRNAME/setup.sh
+  $BATS_TEST_DIRNAME/../setup.sh
+  log "dotfiles setup completed"
 }
 
 @test "dev utils are installed correctly" {
+  log "testing dev utils"
   # Check tldr is installed
   tldr -v > /dev/null
   # Check ripgrep is installed if Ubuntu version > 18.10
@@ -12,6 +18,7 @@ function setup_file() {
 }
 
 @test "git is installed correctly" {
+  log "testing git"
   # Check git is installed
   git --version > /dev/null
   # Check that the global gitconfig was copied, not sym linked
@@ -21,6 +28,7 @@ function setup_file() {
 }
 
 @test "zsh is installed correctly" {
+  log "testing zsh"
   # Check zsh is installed
   zsh --version > /dev/null
   # Check that symlinks to configs have been created
@@ -38,6 +46,7 @@ function setup_file() {
 }
 
 @test "neovim is installed correctly" {
+  log "testing neovim"
   # Check neovim is installed
   nvim -v > /dev/null
   # Check that symlinks to configs have been created
@@ -56,47 +65,53 @@ function setup_file() {
 }
 
 @test "tmux is installed correctly" {
- # Check tmux is installed
- # Check that a symlink to the config has been created
- [ -L $HOME/.tmux.conf ] && [ -e $HOME/.tmux.conf ]
- # Check that plugins are installed correctly, apart from tpm
- [ "$(ls $HOME/.tmux/plugins | grep -v tpm)" ]
- # Check that if neovim is installed, tmux has a theme
- if command -v nvim; then
+  log "testing tmux"
+  # Check tmux is installed
+  # Check that a symlink to the config has been created
+  [ -L $HOME/.tmux.conf ] && [ -e $HOME/.tmux.conf ]
+  # Check that plugins are installed correctly, apart from tpm
+  [ "$(ls $HOME/.tmux/plugins | grep -v tpm)" ]
+  # Check that if neovim is installed, tmux has a theme
+  if command -v nvim; then
   [ -f ~/.tmux/tmuxline-themes/current-theme ]
- fi
+  fi
 }
 
 @test "pyenv is installed correctly" {
- NEW_PYTHON_VERSION="3.8.1"
- # Point directly to pyenv binary because it's not in the path
- # until we use zsh
- PYENV="$HOME/.pyenv/bin/pyenv"
- # Check pyenv is installed
- $PYENV -v > /dev/null
- # Check that a new python version can be installed
- $PYENV install "$NEW_PYTHON_VERSION" > /dev/null
- # Check that the new version can be set
- $PYENV global "$NEW_PYTHON_VERSION"
- [ "$($PYENV global)" == "$NEW_PYTHON_VERSION" ]
+  log "testing neovim"
+  NEW_PYTHON_VERSION="3.8.1"
+  # Point directly to pyenv binary because it's not in the path
+  # until we use zsh
+  PYENV="$HOME/.pyenv/bin/pyenv"
+  # Check pyenv is installed
+  $PYENV -v > /dev/null
+  # Check that a new python version can be installed
+  $PYENV install "$NEW_PYTHON_VERSION" > /dev/null
+  # Check that the new version can be set
+  $PYENV global "$NEW_PYTHON_VERSION"
+  [ "$($PYENV global)" == "$NEW_PYTHON_VERSION" ]
 }
 
 @test "docker is installed correctly" {
+  log "testing docker"
   # Check docker is installed
   docker -v > /dev/null
   # Not testing anything else to avoid messing with DinD
 }
 
 @test "latex is installed correctly" {
+  log "testing latex"
   skip "I refuse to test this because I refuse to use LaTeX"
 }
 
 @test "nodejs is installed correctly" {
+  log "testing nodejs"
   # Check nodejs is installed
   node -v > /dev/null
 }
 
 @test "go is installed correctly" {
+  log "testing go"
   # Check go is installed
   go version > /dev/null
 }

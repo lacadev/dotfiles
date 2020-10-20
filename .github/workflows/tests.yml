@@ -1,8 +1,10 @@
-name: test
+name: tests
+
 on:
   push:
     branches:
     - master
+
 jobs:
   test-dotfiles:
     runs-on: ubuntu-latest
@@ -10,4 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run tests in docker
-        uses: ./
+        uses: ./.github/actions/docker-tests/
+        with:
+          tests-path: "test/"
