@@ -1,7 +1,9 @@
 [user]
-	; email = 36073068+lacadev@users.noreply.github.com
-	; name = lacadev
+  ; email = 36073068+lacadev@users.noreply.github.com
+  ; name = lacadev
 [core]
-	excludesfile = ~/.gitignore_global
+  excludesfile = ~/.gitignore_global
+[rebase]
+	autosquash = true
 [alias]
-	l = log --graph --pretty=format:'%C(yellow)%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  l = log --graph --pretty=format:'%C(yellow)%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
