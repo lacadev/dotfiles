@@ -17,13 +17,11 @@ if $color; then
 	source "${SCRIPTS_DIR}/colors.sh"
 fi
 
-ips_up=$(fping -a -q -t 10 -r 1 -i 1 -g 192.168.1.0/24)
-
 lines=""
 
 for host in ${!hosts[@]}; do
   ip=${hosts[${host}]}
-  if [[ $ips_up == *"$ip"* ]]; then
+  if fping -a -q -t 10 -r 1 -i 1 "$ip" &> /dev/null; then
     status="${Green}ON${Color_Off}"
   else
     status="${Red}OFF${Color_Off}"
