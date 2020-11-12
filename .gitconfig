@@ -7,3 +7,5 @@
 	autosquash = true
 [alias]
   l = log --graph --pretty=format:'%C(yellow)%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+[pull]
+	ff = only
