@@ -20,4 +20,4 @@ install_go
 ## Commented out because these are usually not needed
 # install_latex
 
-ln -s $DOTFILES/scripts ~/scripts
+sudo ln -s $DOTFILES/scripts /opt/scripts
