@@ -5,7 +5,7 @@
 # sharing the note with your personal one if needed
 
 # Needs BW_SESSION in secrets.sh
-SCRIPTS_DIR=$(realpath $0 | xargs dirname)
+SCRIPTS_DIR="/opts/scripts"
 source "${SCRIPTS_DIR}/secrets.sh"
 
 BW_SESSION="${BW_SESSION}" /usr/local/bin/bw --quiet sync

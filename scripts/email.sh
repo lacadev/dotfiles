@@ -46,7 +46,7 @@ EOF
 }
 
 
-SCRIPTS_DIR=$(realpath "$0" | xargs dirname)
+SCRIPTS_DIR="/opt/scripts"
 source "${SCRIPTS_DIR}/secrets.sh"
 
 

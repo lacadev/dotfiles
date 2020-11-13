@@ -8,7 +8,7 @@
 color=false
 [ -n "$1" ] && [ "$1" == "--color" ] && color=true
 
-SCRIPTS_DIR=$(realpath "$0" | xargs dirname)
+SCRIPTS_DIR="/opt/scripts"
 
 HOSTS_FILE="${SCRIPTS_DIR}/hosts.sh"
 source "$HOSTS_FILE"
