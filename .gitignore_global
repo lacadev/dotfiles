@@ -21,3 +21,9 @@ project/
 
 # Vimspector configs
 .vimspector.json
+
+# Java stuff
+.classpath
+.project
+.settings
+.factorypath
