@@ -4,5 +4,9 @@
   "suggest.floatEnable": false,
   //"suggest.enablePreview": false
   "coc.preferences.formatOnType": true,
-  "metals.statusBarEnabled": true
+  "coc.preferences.extensionUpdateCheck": "daily",
+  "metals.statusBarEnabled": true,
+  "python.formatting.provider": "black",
+  "python.linting.flake8Enabled": true,
+  "python.linting.mypyEnabled": true
 }

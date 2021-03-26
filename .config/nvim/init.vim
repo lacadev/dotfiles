@@ -543,6 +543,10 @@ highlight link CocWarningSign DraculaOrange
 " " Resume latest coc list.
 " nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
+" Add extension names to the g:coc_global_extensions variable, and coc will
+" install the missing extensions after coc.nvim service started
+let g:coc_global_extensions = ['coc-json', 'coc-pyright']
+
 " Help Vim recognize *.sbt and *.sc as Scala files
 au BufRead,BufNewFile *.sbt,*.sc set filetype=scala
 

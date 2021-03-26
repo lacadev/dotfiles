@@ -115,6 +115,15 @@ function install_pyenv() {
     libxmlsec1-dev libffi-dev liblzma-dev
 }
 
+# UNTESTED
+function install_poetry() {
+  # Don't run automatically because it needs $python to be python3. Set with pyenv if not done already
+  info "Installing poetry..."
+  curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+  # If using mac: ~/Library/Application Support/pypoetry/
+  ln -s -f $DOTFILES/.config/pypoetry/config.toml ~/.config/pypoetry/config.toml
+}
+
 function install_docker() {
   # This whole thing is untested because DinD needs either some changes in the testing image
   # or just using a DinD image to test this. Might do in the future.

@@ -27,3 +27,6 @@ project/
 .project
 .settings
 .factorypath
+
+# Mac
+.DS_Store
