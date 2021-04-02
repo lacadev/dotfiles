@@ -56,3 +56,5 @@ alias tmuxbell="echo -e '\a'"
 export SHELL="$(which zsh)"
 
 export PATH="$HOME/.poetry/bin:$PATH"
+# Date on the right of the prompt
+# RPROMPT="%{$fg[blue]%}[%@]"
